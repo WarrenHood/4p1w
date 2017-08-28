@@ -14,9 +14,9 @@ button{
   border-radius:30px;
 }
 #out{
-  color:white;
+  color:black;
   border:1px solid orange;
-  background:grey;
+  background:GreenYellow;
   font-size:11pt;
   height:300px;
   width:80%;

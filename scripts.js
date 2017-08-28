@@ -1,3 +1,18 @@
+//localStorage.indAlpha = localStorage.IndAlpha || JSON.stringify({});
+alphas = {};
+
+function setAlphas(ws){
+	var ca = ws[0][0];
+	alphas[ca] = 0;
+	for(var i = 0;i<ws.length;i++){
+		if(ws[i][0] != ca){
+			ca = ws[i][0]+"";
+			alphas[ca] = i;
+		}
+	}
+	alert(JSON.stringify(alphas));
+	//alert(localStorage.IndAlpha);
+}
 var dictName = "words_alpha/words_alpha.txt";
 function g(x){
 	return document.getElementById(x);
@@ -78,18 +93,20 @@ window.onload = function(){
 		//alert(ps);
 		np = [];
 		s="";
-		var i = 0 
+		var i = 0 ;
 		//alert(ps.length);
 		tin = setInterval(function(){
-			if(i==ps.length){busy=false;clearInterval(tin);return;}
+			if(i==ps.length){
+					g('out').innerHTML += "<span style='color:green;'>Task Completed!</span>";
+				busy=false;clearInterval(tin);return;}
 			var w = "";
 			for(var c=0;c<ps[i].length;c++)w+=ps[i][c];
 			if(ps.find(function(element,index,array){return element == w;})){i++;return}
 			if(!exists(w)){i++;return}
 			g('out').innerHTML += w+"<br>";
 			i++;
-		},0.001);
-		//g('out').innerHTML = s;
+		},0.000000001);
+	
 	}
 	}
 	catch(e){
@@ -141,8 +158,7 @@ if (!Array.prototype.find) {
 }
 dict = {};
 words = [];
-function readTextFile(file)
-{
+function readTextFile(file){
 	alert("Dictionary about to load");
     var rawFile = new XMLHttpRequest();
     rawFile.open("GET", file, false);
@@ -154,6 +170,11 @@ function readTextFile(file)
             {
                 var allText = rawFile.responseText;
                 words = allText.toLowerCase().split("\r\n");//.split("\r\n");
+				if(JSON.stringify(alphas) == "{}"){
+					alert("Generating Alphas");
+					setAlphas(words);
+					alert("Alphas generated");
+				}
 				//for(var i=0;i<words.length;i++)dict[words[i]]=true;
 	alert(exists("aahing")?"Ready":"Problem...");
             }
@@ -164,14 +185,14 @@ function readTextFile(file)
 
 function exists(w){
 	
-	for(var i=0;i<words.length;i++){
-		if(words[0] > w[0])return;
-		/*if(words[0] == w[0]){
-			if(words[1] > w[1])return;
-			if(words[1] == w[1]){
-				if(words[2] > w[2])return;
+	for(var i=alphas[w[0]];i<words.length;i++){
+		if(words[i][0] > w[0])return;
+		if(words[i][0] == w[0]){
+			if(words[i][1] > w[1])return;
+			if(words[i][1] == w[1]){
+				if(words[i][2] > w[2])return;
 			}
-		}*/
+		}
 		if(words[i] == w)return true;
 	}
 }
