@@ -1,7 +1,7 @@
 body
 {
   background:black;
-  font-size:30pt;
+  font-size:12pt;
 }
 h1{
   color:green;
@@ -9,7 +9,7 @@ h1{
 button{
   background:orange;
   color:black;
-  font-size:50pt;
+  font-size:15pt;
   border: 2px solid white;
   border-radius:30px;
 }
