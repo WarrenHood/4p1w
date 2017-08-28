@@ -1,4 +1,24 @@
 body
 {
-  font-size: 40pt;
+  background:black;
+  font-size:30pt;
+}
+h1{
+  color:green;
+}
+button{
+  background:orange;
+  color:black;
+  font-size:50pt;
+  border: 2px solid white;
+  border-radius:30px;
+}
+#out{
+  color:white;
+  border:1px solid orange;
+  background:grey;
+  font-size:11pt;
+  height:300px;
+  width:80%;
+  overflow:auto;
 }
