@@ -1,19 +1,4 @@
-//localStorage.indAlpha = localStorage.IndAlpha || JSON.stringify({});
-alphas = {};
-
-function setAlphas(ws){
-	var ca = ws[0][0];
-	alphas[ca] = 0;
-	for(var i = 0;i<ws.length;i++){
-		if(ws[i][0] != ca){
-			ca = ws[i][0]+"";
-			alphas[ca] = i;
-		}
-	}
-	alert(JSON.stringify(alphas));
-	//alert(localStorage.IndAlpha);
-}
-var dictName = "words_alpha/words_alpha.txt";
+var dictName = "wl.txt";
 function g(x){
 	return document.getElementById(x);
 }
@@ -75,44 +60,55 @@ function permutations(array, r) {
     }                                                                              
     return results;                                                                
 } 
-window.onload = function(){
+function reps(w,c){
 	try{
-		busy = false;
+	var t=0;
+	for(var i=0;i<w.length;i++)t+= (w[i]==c?1:0);
+	return t;
+	}
+	catch(e){
+		
+		alert("err: \nword="+w+"\ni="+i);
+	}
+}
+window.onload = function(){
+		//alert(reps("aabc","a"));
+		//tarr = [1,2, 3,4];
+		//tarr.splice(0,1);
+		//alert(JSON.stringify(tarr));
 		readTextFile(dictName);
 		//alert("ready");
-	g("gen").onclick = function(){
-		if(busy){
-			return;
-		}
-		busy = true;
+		g("gen").onclick = function(){
+		
 		g('out').innerHTML = "<span style='color:red;'>Calculating...</span><br>";
 		//alert("calc");
 		var n = g("n").value;
 		var lets = g("lets").value;
-		var ps = permutations(lets,n);
-		//alert(ps);
-		np = [];
-		s="";
-		var i = 0 ;
-		//alert(ps.length);
-		tin = setInterval(function(){
-			if(i==ps.length){
-					g('out').innerHTML += "<span style='color:green;'>Task Completed!</span>";
-				busy=false;clearInterval(tin);return;}
-			var w = "";
-			for(var c=0;c<ps[i].length;c++)w+=ps[i][c];
-			if(ps.find(function(element,index,array){return element == w;})){i++;return}
-			if(!exists(w)){i++;return}
-			g('out').innerHTML += w+"<br>";
+		var coun = {};
+		for(var ci=0;ci<lets.length;ci++)coun[lets[ci]] = reps(lets,lets[ci]);
+		cnams = [];
+		for(var wd=0;wd<words.length;wd++)if(words[wd].length != n){words.splice(wd,1);wd--;}
+		var i=0;
+		while(i<words.length){
+			for(var ki=0;ki<words[i].length;ki++){
+				var k = words[i][ki];
+				//alert( reps(words[i],k)+" > "+coun[k]+" "+words[i]);
+				if(reps(words[i],k) > reps(lets,k)){
+					//alert(true);
+					words.splice(i,1);
+					i = i-1;
+					break;
+					alert(i);
+					}
+					
+			}
 			i++;
-		},0.000000001);
-	
-	}
-	}
-	catch(e){
-		alert(e);
-	}
-}
+		}
+	for(var wd=0;wd<words.length;wd++)g("out").innerHTML+=(words.length>0?words[wd]:"No results")+"<br>";
+	readTextFile(dictName);
+	g("out").innerHTML+="<span style='color:green;'>Done</span>";
+	};
+};
 if (!Array.prototype.find) {
   Object.defineProperty(Array.prototype, 'find', {
     value: function(predicate) {
@@ -159,7 +155,7 @@ if (!Array.prototype.find) {
 dict = {};
 words = [];
 function readTextFile(file){
-	alert("Dictionary about to load");
+	//alert("Dictionary about to load");
     var rawFile = new XMLHttpRequest();
     rawFile.open("GET", file, false);
     rawFile.onreadystatechange = function ()
@@ -169,14 +165,9 @@ function readTextFile(file){
             if(rawFile.status === 200 || rawFile.status == 0)
             {
                 var allText = rawFile.responseText;
-                words = allText.toLowerCase().split("\r\n");//.split("\r\n");
-				if(JSON.stringify(alphas) == "{}"){
-					alert("Generating Alphas");
-					setAlphas(words);
-					alert("Alphas generated");
-				}
+                words = allText.toLowerCase().split(" ");
 				//for(var i=0;i<words.length;i++)dict[words[i]]=true;
-	alert(exists("aahing")?"Ready":"Problem...");
+	//alert(exists("aahing")?"Ready":"Problem...");
             }
         }
     }
